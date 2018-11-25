@@ -6,89 +6,119 @@ Created on Wed Nov  7 16:04:21 2018
 @author: dsambugaro
 """
 
-import pygame
-pygame.init()
-#
-display = pygame.display.set_mode((600,600))
-clock = pygame.time.Clock()
-#
-scene = [
-    "XXXXXXXXXXXXXXXXXXXXXX",
-    "X--------------------X",
-    "X--------------------X",
-    "X--------------------X",
-    "XXXXXXXX-------------X",
-    "X--------------------X",
-    "X------X-------------X",
-    "X--XX--XXXXXXXXXXXXXXX",
-    "X--XX--X-------------X",
-    "X--------------------X",
-    "X------X-------------X",
-    "XXXXXXXXXXXXXXXXXXXXXX"]
-#
-map = pygame.Surface((len(scene[0])*64,len(scene)*64)) 
-x,y = 0,0
-for row in scene:
-    for tile in row:
-        if tile in "-":
-            pygame.draw.rect(map,(0,155,0),((x,y),(64,64)))
-        elif tile in "X":
-            pygame.draw.rect(map,(125,125,125),((x,y),(64,64)))
-        else:
-            pygame.draw.rect(map,(255,128,122),((x,y),(64,64)))
-        x += 64
-    y += 64
-    x = 0
-#
-class Player:
+import sys
+import os.path
+
+import pygame as pg
+import pyscroll
+import pyscroll.data
+from pygame.locals import *
+from pytmx.util_pygame import load_pygame
+from pyscroll.group import PyscrollGroup
+
+from settings import *
+from sprites import Player
+from tilemap import Map
+
+
+def init_screen(width, height):
+    screen = pg.display.set_mode((width, height), pg.RESIZABLE)
+    return screen
+
+def get_map(filename):
+    return os.path.join(MAPS_DIR, filename)
+
+
+class MainGame:
     def __init__(self):
-        self.image = pygame.Surface((32,32))
-        self.image.fill((255,0,0))
-        self.rect = pygame.Rect((284,284),(32,32))
-        self.map_pos = (0,0)
-        self.moveBox = (100,100,500,500)
-    def move(self):
-        mx,my = self.map_pos
-        key = pygame.key.get_pressed()
-        if key[pygame.K_w]:
-            self.rect.y -= 8
-        if key[pygame.K_a]:
-            self.rect.x -= 8
-        if key[pygame.K_s]:
-            self.rect.y += 8
-        if key[pygame.K_d]:
-            self.rect.x += 8
-        if player.rect.x <= self.moveBox[0]:
-            self.rect.x += 8
-            mx += 8
-        elif player.rect.x >= self.moveBox[2]-32:
-            self.rect.x -= 8
-            mx -= 8
-        if player.rect.y <= self.moveBox[1]:
-            self.rect.y += 8
-            my += 8
-        elif player.rect.y >= self.moveBox[3]-32:
-            self.rect.y -= 8
-            my -= 8
-        self.map_pos = (mx,my)
-    def render(self,display):
-        display.blit(self.image,(self.rect.x,self.rect.y))
-#
-player = Player()
-#
-RUNNING = True
-while RUNNING:
-    clock.tick(60)
-    for event in pygame.event.get():
-        if event.type == pygame.QUIT:
-            RUNNING = False
-    #
-    player.move()
-    #
-    display.fill((0,155,0))
-    display.blit(map,player.map_pos)
-    player.render(display)
-    #
-    pygame.display.flip()
-#
-pygame.quit()
+        pg.init()
+        pg.display.set_caption('< a nice name here >')
+        self.running = False
+        self.screen = pg.display.set_mode(WINDOW_RESOLUTION)
+        self.player = Player(self, (160,718))
+        self.new_map(TEMPLE)
+        self.new_group()
+
+    def new_map(self, filename):
+        self.map = Map(get_map(filename), self.screen)
+        self.walls = self.map.getWalls()
+
+    def new_group(self):
+        self.group = self.map.group()
+        self.group.add(self.player)
+
+    def quit_game(self):
+        pg.quit()
+        sys.exit()
+
+    def draw(self):
+
+        self.group.center(self.player.rect.center)
+        self.group.draw(self.screen)
+
+    def handle_input(self):
+        poll = pg.event.poll
+
+        event = poll()
+        while event:
+            if event.type == QUIT:
+                self.running = False
+                self.quit_game()
+                break
+
+            elif event.type == KEYDOWN:
+                if event.key == K_ESCAPE:
+                    self.running = False
+                    self.quit_game()
+                    break
+
+                elif event.key == K_EQUALS:
+                    self.map.zoomIn(.25)
+
+                elif event.key == K_MINUS:
+                    self.map.zoomOut(.25)
+
+            elif event.type == VIDEORESIZE:
+                init_screen(event.w, event.h)
+                self.map_layer.set_size((event.w, event.h))
+
+            event = poll()
+
+    def update(self, dt):
+        
+        self.group.update(dt)
+        for sprite in self.group.sprites():
+            if sprite.feet.collidelist(self.walls) > -1:
+                sprite.move_back(dt)
+
+    def run(self):
+        clock = pg.time.Clock()
+        self.running = True
+
+        from collections import deque
+        times = deque(maxlen=30)
+
+        try:
+            while self.running:
+                dt = clock.tick() / 1000.
+                times.append(clock.get_fps())
+
+                self.handle_input()
+                self.update(dt)
+                self.draw()
+                pg.display.flip()
+
+        except KeyboardInterrupt:
+            self.running = False
+            self.quit_game()
+            
+
+
+if __name__ == "__main__":
+    
+    try:
+        game = MainGame()
+        game.run()
+    except:
+        pg.quit()
+        raise
