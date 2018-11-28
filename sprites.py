@@ -9,16 +9,18 @@ import pygame as pg
 from pygame.locals import *
 from glob import glob
 
+from pygame.math import Vector2
+vec = Vector2
+
 from settings import *
+import save
 
 class Player(pg.sprite.Sprite):
 
-    def __init__(self, game, position):
+    def __init__(self, game, x, y):
         pg.sprite.Sprite.__init__(self)
-        #self.image = load_image('elf_m_idle_anim_f0.png').convert_alpha()
         self.images_idle = self.load_character_animation('elf','m','idle')
         self.images_run = self.load_character_animation('elf','m','run')
-            
         self.images_right_idle = self.images_idle
         self.images_right_run = self.images_run
         self.images_left_idle = [pg.transform.flip(image, True, False) for image in self.images_idle]
@@ -34,15 +36,18 @@ class Player(pg.sprite.Sprite):
         self.animation_frames = len(self.images)
         self.current_frame = 0
         
-        self.velocity = PLAYER_VELOCITY
-        self._position = vec(position[0], position[1])
+        self._position = [x, y]
         self._old_position = self.position
         self.rect = self.image.get_rect()
-        self.feet = pg.Rect(0, 0, self.rect.width * .5, 8)
-        
+        self.feet = pg.Rect(0, 0, self.rect.width * .55, 6)
+
         self.right = False
         self.left = False
-
+        
+        self.HP = HP
+        self.velocity = PLAYER_VELOCITY
+        self.speed = PLAYER_MOVE_SPEED
+        
     @property
     def position(self):
         return list(self._position)
@@ -50,6 +55,9 @@ class Player(pg.sprite.Sprite):
     @position.setter
     def position(self, value):
         self._position = list(value)
+    
+    def load_save(self):
+        self.speed = save.PLAYER_MOVE_SPEED
     
     def load_character_animation(self, character, genre, action):
         sprites = glob(HEROES_SPRITES_DIR + '/' + character + '_' + genre +'_' + action + '_anim_f*.png')
@@ -64,37 +72,37 @@ class Player(pg.sprite.Sprite):
         pressed = pg.key.get_pressed()
         
         if pressed[K_UP]  or pressed[K_w]:
-            self.velocity.y = -PLAYER_MOVE_SPEED
+            self.velocity[1] = -self.speed
         elif pressed[K_DOWN]  or pressed[K_s]:
-            self.velocity.y = PLAYER_MOVE_SPEED
+            self.velocity[1] = self.speed
         else:
-            self.velocity.y = 0
+            self.velocity[1] = 0
 
         if pressed[K_LEFT] or pressed[K_a]:
-            self.velocity.x = -PLAYER_MOVE_SPEED
+            self.velocity[0] = -self.speed
         elif pressed[K_RIGHT]  or pressed[K_d]:
-            self.velocity.x = PLAYER_MOVE_SPEED
+            self.velocity[0] = self.speed
         else:
-            self.velocity.x = 0
+            self.velocity[0] = 0
     
-    def update_by_time(self, dt):
-        if self.velocity.x > 0:
+    def update_time_dependent(self, dt):
+        if self.velocity[0] > 0:
             self.images = self.images_right_run
             self.right = True
             self.left = False
             
-        elif self.velocity.x < 0:
+        elif self.velocity[0] < 0:
             self.images = self.images_left_run
             self.left = True
             self.right = False
             
-        elif self.velocity.y > 0 or self.velocity.y < 0:
+        elif self.velocity[1] > 0 or self.velocity[1] < 0:
             if self.left:
                 self.images = self.images_left_run
             if self.right:
                 self.images = self.images_right_run
                 
-        elif self.velocity.x == 0 and self.velocity.y == 0:
+        elif self.velocity[0] == 0 and self.velocity[1] == 0:
             if self.left:
                 self.images = self.images_left_idle
             if self.right:
@@ -110,14 +118,16 @@ class Player(pg.sprite.Sprite):
 
     def update(self, dt):
         self.get_keys()
-        self.update_by_time(dt)
-        self._old_position = self._position
-        self._position.x += self.velocity.x * dt
-        self._position.y += self.velocity.y * dt
+        self.update_time_dependent(dt)
+        self._old_position = self._position[:]
+        self._position[0] += self.velocity[0] * dt
+        self._position[1] += self.velocity[1] * dt
         self.rect.topleft = self._position
         self.feet.midbottom = self.rect.midbottom
 
     def move_back(self, dt):
+        """ If called after an update, the sprite can move back
+        """
         self._position = self._old_position
         self.rect.topleft = self._position
         self.feet.midbottom = self.rect.midbottom

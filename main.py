@@ -10,16 +10,11 @@ import sys
 import os.path
 
 import pygame as pg
-import pyscroll
-import pyscroll.data
 from pygame.locals import *
-from pytmx.util_pygame import load_pygame
-from pyscroll.group import PyscrollGroup
 
 from settings import *
-from sprites import Player
 from tilemap import Map
-
+from sprites import Player
 
 def init_screen(width, height):
     screen = pg.display.set_mode((width, height), pg.RESIZABLE)
@@ -35,13 +30,19 @@ class MainGame:
         pg.display.set_caption('< a nice name here >')
         self.running = False
         self.screen = pg.display.set_mode(WINDOW_RESOLUTION)
-        self.player = Player(self, (160,718))
         self.new_map(TEMPLE)
+        
+        self.obstacle = []
+        for object in self.map.tmx_data.objects:
+            if object.name == 'wall' or object.name == 'door' and object.visible:
+                self.obstacle.append(pg.Rect(object.x, object.y, object.width, object.height))
+            if object.name == 'init' and object.visible:
+                self.player = Player(self, object.x,object.y)
+        
         self.new_group()
 
     def new_map(self, filename):
         self.map = Map(get_map(filename), self.screen)
-        self.walls = self.map.getWalls()
 
     def new_group(self):
         self.group = self.map.group()
@@ -51,10 +52,47 @@ class MainGame:
         pg.quit()
         sys.exit()
 
-    def draw(self):
+    def update_obstacles(self):
+        self.obstacle = []
+        for object in self.map.tmx_data.objects:
+            if object.name == 'wall' or object.name == 'door' and object.visible:
+                self.obstacle.append(pg.Rect(object.x, object.y, object.width, object.height))
 
+    def draw_hp(self):
+        full = pg.image.load(os.path.join(UI_SPRITES_DIR, 'ui_heart_full.png')).convert_alpha()
+        half = pg.image.load(os.path.join(UI_SPRITES_DIR, 'ui_heart_half.png')).convert_alpha()
+        empty = pg.image.load(os.path.join(UI_SPRITES_DIR, 'ui_heart_empty.png')).convert_alpha()
+        
+        full = pg.transform.scale(full, (HP_SIZE, HP_SIZE))
+        half = pg.transform.scale(half, (HP_SIZE, HP_SIZE))
+        half = pg.transform.flip(half, True, False)
+        empty = pg.transform.scale(empty, (HP_SIZE, HP_SIZE))
+        
+        hearts_full = int((self.player.HP / 0.2)/10)
+        hearts = [full for i in range(hearts_full)]
+        
+        if self.player.HP % 2 != 0:
+            hearts.append(half)
+
+        for i in range(HEARTS-hearts_full):
+            hearts.append(empty)
+        
+        for i in range(0, HEARTS):
+                self.screen.blit(hearts[i], (WINDOW_RESOLUTION[0] - HP_SIZE*(i+1), 10))
+        
+        pg.display.update()
+
+
+    def draw(self):
         self.group.center(self.player.rect.center)
         self.group.draw(self.screen)
+        self.draw_hp()
+
+#        for sprite in self.group.sprites():
+#            pg.draw.rect(self.screen, (255, 255, 255), sprite.feet)
+#        
+#        for wall in self.obstacle:
+#            pg.draw.rect(self.screen, (255, 255, 255), wall)
 
     def handle_input(self):
         poll = pg.event.poll
@@ -85,10 +123,10 @@ class MainGame:
             event = poll()
 
     def update(self, dt):
-        
         self.group.update(dt)
+        
         for sprite in self.group.sprites():
-            if sprite.feet.collidelist(self.walls) > -1:
+            if sprite.feet.collidelist(self.obstacle) > -1:
                 sprite.move_back(dt)
 
     def run(self):
