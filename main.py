@@ -6,89 +6,157 @@ Created on Wed Nov  7 16:04:21 2018
 @author: dsambugaro
 """
 
-import pygame
-pygame.init()
-#
-display = pygame.display.set_mode((600,600))
-clock = pygame.time.Clock()
-#
-scene = [
-    "XXXXXXXXXXXXXXXXXXXXXX",
-    "X--------------------X",
-    "X--------------------X",
-    "X--------------------X",
-    "XXXXXXXX-------------X",
-    "X--------------------X",
-    "X------X-------------X",
-    "X--XX--XXXXXXXXXXXXXXX",
-    "X--XX--X-------------X",
-    "X--------------------X",
-    "X------X-------------X",
-    "XXXXXXXXXXXXXXXXXXXXXX"]
-#
-map = pygame.Surface((len(scene[0])*64,len(scene)*64)) 
-x,y = 0,0
-for row in scene:
-    for tile in row:
-        if tile in "-":
-            pygame.draw.rect(map,(0,155,0),((x,y),(64,64)))
-        elif tile in "X":
-            pygame.draw.rect(map,(125,125,125),((x,y),(64,64)))
-        else:
-            pygame.draw.rect(map,(255,128,122),((x,y),(64,64)))
-        x += 64
-    y += 64
-    x = 0
-#
-class Player:
+import sys
+import os.path
+
+import pygame as pg
+from pygame.locals import *
+
+from settings import *
+from tilemap import Map
+from sprites import Player
+
+def init_screen(width, height):
+    screen = pg.display.set_mode((width, height), pg.RESIZABLE)
+    return screen
+
+def get_map(filename):
+    return os.path.join(MAPS_DIR, filename)
+
+
+class MainGame:
     def __init__(self):
-        self.image = pygame.Surface((32,32))
-        self.image.fill((255,0,0))
-        self.rect = pygame.Rect((284,284),(32,32))
-        self.map_pos = (0,0)
-        self.moveBox = (100,100,500,500)
-    def move(self):
-        mx,my = self.map_pos
-        key = pygame.key.get_pressed()
-        if key[pygame.K_w]:
-            self.rect.y -= 8
-        if key[pygame.K_a]:
-            self.rect.x -= 8
-        if key[pygame.K_s]:
-            self.rect.y += 8
-        if key[pygame.K_d]:
-            self.rect.x += 8
-        if player.rect.x <= self.moveBox[0]:
-            self.rect.x += 8
-            mx += 8
-        elif player.rect.x >= self.moveBox[2]-32:
-            self.rect.x -= 8
-            mx -= 8
-        if player.rect.y <= self.moveBox[1]:
-            self.rect.y += 8
-            my += 8
-        elif player.rect.y >= self.moveBox[3]-32:
-            self.rect.y -= 8
-            my -= 8
-        self.map_pos = (mx,my)
-    def render(self,display):
-        display.blit(self.image,(self.rect.x,self.rect.y))
-#
-player = Player()
-#
-RUNNING = True
-while RUNNING:
-    clock.tick(60)
-    for event in pygame.event.get():
-        if event.type == pygame.QUIT:
-            RUNNING = False
-    #
-    player.move()
-    #
-    display.fill((0,155,0))
-    display.blit(map,player.map_pos)
-    player.render(display)
-    #
-    pygame.display.flip()
-#
-pygame.quit()
+        pg.init()
+        pg.display.set_caption('< a nice name here >')
+        self.running = False
+        self.screen = pg.display.set_mode(WINDOW_RESOLUTION)
+        self.new_map(TEMPLE)
+        
+        self.obstacle = []
+        for object in self.map.tmx_data.objects:
+            if object.name == 'wall' or object.name == 'door' and object.visible:
+                self.obstacle.append(pg.Rect(object.x, object.y, object.width, object.height))
+            if object.name == 'init' and object.visible:
+                self.player = Player(self, object.x,object.y)
+        
+        self.new_group()
+
+    def new_map(self, filename):
+        self.map = Map(get_map(filename), self.screen)
+
+    def new_group(self):
+        self.group = self.map.group()
+        self.group.add(self.player)
+
+    def quit_game(self):
+        pg.quit()
+        sys.exit()
+
+    def update_obstacles(self):
+        self.obstacle = []
+        for object in self.map.tmx_data.objects:
+            if object.name == 'wall' or object.name == 'door' and object.visible:
+                self.obstacle.append(pg.Rect(object.x, object.y, object.width, object.height))
+
+    def draw_hp(self):
+        full = pg.image.load(os.path.join(UI_SPRITES_DIR, 'ui_heart_full.png')).convert_alpha()
+        half = pg.image.load(os.path.join(UI_SPRITES_DIR, 'ui_heart_half.png')).convert_alpha()
+        empty = pg.image.load(os.path.join(UI_SPRITES_DIR, 'ui_heart_empty.png')).convert_alpha()
+        
+        full = pg.transform.scale(full, (HP_SIZE, HP_SIZE))
+        half = pg.transform.scale(half, (HP_SIZE, HP_SIZE))
+        half = pg.transform.flip(half, True, False)
+        empty = pg.transform.scale(empty, (HP_SIZE, HP_SIZE))
+        
+        hearts_full = int((self.player.HP / 0.2)/10)
+        hearts = [full for i in range(hearts_full)]
+        
+        if self.player.HP % 2 != 0:
+            hearts.append(half)
+
+        for i in range(HEARTS-hearts_full):
+            hearts.append(empty)
+        
+        for i in range(0, HEARTS):
+                self.screen.blit(hearts[i], (WINDOW_RESOLUTION[0] - HP_SIZE*(i+1), 10))
+        
+        pg.display.update()
+
+
+    def draw(self):
+        self.group.center(self.player.rect.center)
+        self.group.draw(self.screen)
+        self.draw_hp()
+
+#        for sprite in self.group.sprites():
+#            pg.draw.rect(self.screen, (255, 255, 255), sprite.feet)
+#        
+#        for wall in self.obstacle:
+#            pg.draw.rect(self.screen, (255, 255, 255), wall)
+
+    def handle_input(self):
+        poll = pg.event.poll
+
+        event = poll()
+        while event:
+            if event.type == QUIT:
+                self.running = False
+                self.quit_game()
+                break
+
+            elif event.type == KEYDOWN:
+                if event.key == K_ESCAPE:
+                    self.running = False
+                    self.quit_game()
+                    break
+
+                elif event.key == K_EQUALS:
+                    self.map.zoomIn(.25)
+
+                elif event.key == K_MINUS:
+                    self.map.zoomOut(.25)
+
+            elif event.type == VIDEORESIZE:
+                init_screen(event.w, event.h)
+                self.map_layer.set_size((event.w, event.h))
+
+            event = poll()
+
+    def update(self, dt):
+        self.group.update(dt)
+        
+        for sprite in self.group.sprites():
+            if sprite.feet.collidelist(self.obstacle) > -1:
+                sprite.move_back(dt)
+
+    def run(self):
+        clock = pg.time.Clock()
+        self.running = True
+
+        from collections import deque
+        times = deque(maxlen=30)
+
+        try:
+            while self.running:
+                dt = clock.tick() / 1000.
+                times.append(clock.get_fps())
+
+                self.handle_input()
+                self.update(dt)
+                self.draw()
+                pg.display.flip()
+
+        except KeyboardInterrupt:
+            self.running = False
+            self.quit_game()
+            
+
+
+if __name__ == "__main__":
+    
+    try:
+        game = MainGame()
+        game.run()
+    except:
+        pg.quit()
+        raise
