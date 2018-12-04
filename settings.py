@@ -8,10 +8,13 @@ Created on Sun Nov 25 02:20:07 2018
 
 MAPS_DIR = 'maps'
 HEROES_SPRITES_DIR = 'art/heroine'
+ENEMIES_SPRITES_DIR = 'art/enemies'
+OBJECTS_SPRITES_DIR = 'art/objects'
+
 SCENARIO_SPRITES_DIR = 'art/scenario'
 UI_SPRITES_DIR = 'art/interface'
 
-TEMPLE = 'cave.tmx'
+TEMPLE = 'temple.tmx'
 
 HAS_SAVE = False
 
@@ -40,7 +43,31 @@ WEAPONS['regular_sword'] = {
         'sprite': 'weapon_regular_sword.png'
         }
 
+# Enemies
+ENEMIES = {}
 
+ENEMIES[''] = {
+        'damage': 3,
+        'hp': 10,
+        'critical':0.2,
+        'sprite': 'weapon_regular_sword.png'
+        }
+
+# Dialogs
+DIALOGS = {}
+
+DIALOGS['test'] = [
+        [
+                'ASDASDASDASDASDASDASDASDAS DASDASDASDASDASSDSDS',
+                'ASDASDASDASDASDASDASDASDAS DASDASDASDASDASSDSDS',
+                'ASDASDASDASDASDASDASDASDAS DASDASDASDASDASSDSDS',
+                'ASDASDASDASDASDASDASDASDAS DASDASDASDASDASSDSDS'
+        ],
+        [
+                '!@#$%*() ã àá ç õ',
+                'ASDASDASDASDASDASDASDASDAS DASDASDASDASDASSDSDS'
+        ]
+    ]
 
 # Game settings
 WINDOW_RESOLUTION = (1280, 720)
