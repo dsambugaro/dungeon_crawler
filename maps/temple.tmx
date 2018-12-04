@@ -541,7 +541,7 @@
   </object>
  </objectgroup>
  <objectgroup id="14" name="Doors">
-  <object id="105" name="door" type="1" x="384.091" y="495.636" width="32.9091" height="31.3636" visible="0"/>
+  <object id="105" name="door" type="1" x="384.091" y="495.636" width="32.9091" height="31.3636"/>
   <object id="106" name="door" type="2" x="143.955" y="287.364" width="32.9091" height="31.3636"/>
   <object id="107" name="door" type="3" x="623.955" y="287.364" width="32.9091" height="31.3636"/>
   <object id="108" name="door" type="4" x="143.955" y="111.364" width="32.9091" height="31.3636"/>

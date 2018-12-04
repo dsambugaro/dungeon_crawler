@@ -8,9 +8,10 @@ Created on Sun Nov 25 02:20:07 2018
 
 MAPS_DIR = 'maps'
 HEROES_SPRITES_DIR = 'art/heroine'
+SCENARIO_SPRITES_DIR = 'art/scenario'
 UI_SPRITES_DIR = 'art/interface'
 
-TEMPLE = 'temple.tmx'
+TEMPLE = 'cave.tmx'
 
 HAS_SAVE = False
 
@@ -25,6 +26,12 @@ WEAPONS['rusty_sword'] = {
         'damage': 1,
         'critical':0.1,
         'sprite': 'weapon_rusty_sword.png'
+        }
+
+WEAPONS['regular_sword'] = {
+        'damage': 3,
+        'critical':0.2,
+        'sprite': 'weapon_regular_sword.png'
         }
 
 WEAPONS['regular_sword'] = {

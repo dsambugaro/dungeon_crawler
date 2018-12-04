@@ -126,8 +126,12 @@ class Player(pg.sprite.Sprite):
         self.feet.midbottom = self.rect.midbottom
 
     def move_back(self, dt):
-        """ If called after an update, the sprite can move back
-        """
         self._position = self._old_position
         self.rect.topleft = self._position
         self.feet.midbottom = self.rect.midbottom
+
+class Door():
+    def __init__(self, x, y):
+        pg.sprite.Sprite.__init__(self)
+        self.image = pg.image.load(SCENARIO_SPRITES_DIR + 'doors_leaf_closed.png').convert_alpha()
+        self.rect = self.image.get_rect()

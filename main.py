@@ -11,10 +11,11 @@ import os.path
 
 import pygame as pg
 from pygame.locals import *
+from pyscroll.group import PyscrollGroup
 
 from settings import *
 from tilemap import Map
-from sprites import Player
+from sprites import Player, Door
 
 def init_screen(width, height):
     screen = pg.display.set_mode((width, height), pg.RESIZABLE)
@@ -22,7 +23,6 @@ def init_screen(width, height):
 
 def get_map(filename):
     return os.path.join(MAPS_DIR, filename)
-
 
 class MainGame:
     def __init__(self):
@@ -32,21 +32,28 @@ class MainGame:
         self.screen = pg.display.set_mode(WINDOW_RESOLUTION)
         self.new_map(TEMPLE)
         
-        self.obstacle = []
-        for object in self.map.tmx_data.objects:
-            if object.name == 'wall' or object.name == 'door' and object.visible:
-                self.obstacle.append(pg.Rect(object.x, object.y, object.width, object.height))
-            if object.name == 'init' and object.visible:
-                self.player = Player(self, object.x,object.y)
+        self.group = PyscrollGroup(map_layer=self.map.layer, default_layer=2)
         
-        self.new_group()
+        self.all = []
+        self.obstacle = []
+        self.doors = []
+        print(self.map.map_data)
+        for object in self.map.map_data.tmx.objects:
+            if object.name == 'wall' and object.visible:
+                self.all.append(pg.Rect(object.x, object.y, object.width, object.height))
+                self.obstacle.append(pg.Rect(object.x, object.y, object.width, object.height))
+            if object.name == 'door' and object.visible:
+                self.all.append(pg.Rect(object.x, object.y, object.width, object.height))
+                self.obstacle.append(pg.Rect(object.x, object.y, object.width, object.height))
+                self.doors.append(Door(object.x,object.y))
+            if object.name == 'init' and object.visible:
+                self.all.append(pg.Rect(object.x, object.y, object.width, object.height))
+                self.player = Player(self, object.x,object.y)
+        self.player = Player(self, 160,160)
+        self.group.add(self.player)
 
     def new_map(self, filename):
         self.map = Map(get_map(filename), self.screen)
-
-    def new_group(self):
-        self.group = self.map.group()
-        self.group.add(self.player)
 
     def quit_game(self):
         pg.quit()
@@ -125,9 +132,8 @@ class MainGame:
     def update(self, dt):
         self.group.update(dt)
         
-        for sprite in self.group.sprites():
-            if sprite.feet.collidelist(self.obstacle) > -1:
-                sprite.move_back(dt)
+        if self.player.feet.collidelist(self.obstacle) > -1:
+            self.player.move_back(dt)
 
     def run(self):
         clock = pg.time.Clock()
