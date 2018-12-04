@@ -7,7 +7,6 @@ Created on Sun Nov 25 03:09:21 2018
 """
 
 import pyscroll
-from pyscroll.group import PyscrollGroup
 from pytmx.util_pygame import load_pygame
 
 class Map:
@@ -21,20 +20,17 @@ class Map:
 
 
     def camera_init(self):
-        map_data = pyscroll.data.TiledMapData(self.tmx_data)
-        self.map_layer = pyscroll.BufferedRenderer(map_data, self.screen.get_size(), clamp_camera=False, tall_sprites=1)
-        self.map_layer.zoom = self.zoom
+        self.map_data = pyscroll.data.TiledMapData(self.tmx_data)
+        self.layer = pyscroll.BufferedRenderer(self.map_data, self.screen.get_size(), clamp_camera=False, tall_sprites=1)
+        self.layer.zoom = self.zoom
 
-    def group(self):
-        return PyscrollGroup(map_layer=self.map_layer, default_layer=2)
-
-    def zoom():
-        return self.map_layer.zoom
+    def zoom(self):
+        return self.layer.zoom
 
     def zoomIn(self, value):
-        self.map_layer.zoom += value
+        self.layer.zoom += value
 
     def zoomOut(self, value):
-        new_zoom = self.map_layer.zoom - value
+        new_zoom = self.layer.zoom - value
         if new_zoom > 0:
-            self.map_layer.zoom = new_zoom
+            self.layer.zoom = new_zoom

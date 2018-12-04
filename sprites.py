@@ -16,9 +16,9 @@ from settings import *
 import save
 
 class Player(pg.sprite.Sprite):
-
     def __init__(self, game, x, y):
         pg.sprite.Sprite.__init__(self)
+        self.game = game
         self.images_idle = self.load_character_animation('elf','m','idle')
         self.images_run = self.load_character_animation('elf','m','run')
         self.images_right_idle = self.images_idle
@@ -48,6 +48,8 @@ class Player(pg.sprite.Sprite):
         self.velocity = PLAYER_VELOCITY
         self.speed = PLAYER_MOVE_SPEED
         
+        self._steps = 0
+        
     @property
     def position(self):
         return list(self._position)
@@ -56,8 +58,20 @@ class Player(pg.sprite.Sprite):
     def position(self, value):
         self._position = list(value)
     
+    @property
+    def steps(self):
+        return int(self._steps/20)
+    
+    @steps.setter
+    def steps(self, value):
+        if value > 0:
+            self._steps = value
+        else:
+            self._steps = 0
+    
     def load_save(self):
         self.speed = save.PLAYER_MOVE_SPEED
+        self.HP = save.HP
     
     def load_character_animation(self, character, genre, action):
         sprites = glob(HEROES_SPRITES_DIR + '/' + character + '_' + genre +'_' + action + '_anim_f*.png')
@@ -70,20 +84,25 @@ class Player(pg.sprite.Sprite):
     
     def get_keys(self):
         pressed = pg.key.get_pressed()
-        
-        if pressed[K_UP]  or pressed[K_w]:
-            self.velocity[1] = -self.speed
-        elif pressed[K_DOWN]  or pressed[K_s]:
-            self.velocity[1] = self.speed
-        else:
-            self.velocity[1] = 0
+        if not self.game.dialog:
+            if pressed[K_UP]  or pressed[K_w]:
+                self._steps += 1
+                self.velocity[1] = -self.speed
+            elif pressed[K_DOWN]  or pressed[K_s]:
+                self._steps += 1
+                self.velocity[1] = self.speed
+            else:
+                self.velocity[1] = 0
+    
+            if pressed[K_LEFT] or pressed[K_a]:
+                self._steps += 1
+                self.velocity[0] = -self.speed
+            elif pressed[K_RIGHT]  or pressed[K_d]:
+                self._steps += 1
+                self.velocity[0] = self.speed
+            else:
+                self.velocity[0] = 0
 
-        if pressed[K_LEFT] or pressed[K_a]:
-            self.velocity[0] = -self.speed
-        elif pressed[K_RIGHT]  or pressed[K_d]:
-            self.velocity[0] = self.speed
-        else:
-            self.velocity[0] = 0
     
     def update_time_dependent(self, dt):
         if self.velocity[0] > 0:
@@ -126,8 +145,108 @@ class Player(pg.sprite.Sprite):
         self.feet.midbottom = self.rect.midbottom
 
     def move_back(self, dt):
-        """ If called after an update, the sprite can move back
-        """
         self._position = self._old_position
         self.rect.topleft = self._position
         self.feet.midbottom = self.rect.midbottom
+
+class Door(pg.sprite.Sprite):
+    def __init__(self, x, y, id_door):
+        super().__init__()
+        self.image = pg.image.load(SCENARIO_SPRITES_DIR + '/doors_leaf_closed.png').convert_alpha()
+        self.rect = self.image.get_rect()
+        self._position = [x, y]
+        self.id = id_door
+    
+    def update(self, dt):
+        self.rect.topleft = self._position
+
+class NPC(pg.sprite.Sprite):
+    def __init__(self, x, y, npc, action='idle'):
+        super().__init__()
+        self.images_idle = self.load_character_animation(npc, action)
+        self.index = 0
+        self.images = self.images_idle
+        self.image = self.images[self.index]
+
+        self.animation_time = 0.12
+        self.current_time = 0
+
+        self.animation_frames = len(self.images)
+        self.current_frame = 0
+
+        self._position = [x, y]
+        self.rect = self.image.get_rect()
+
+    @property
+    def position(self):
+        return list(self._position)
+
+    @position.setter
+    def position(self, value):
+        self._position = list(value)
+    
+    def load_character_animation(self, npc, action):
+        sprites = glob(ENEMIES_SPRITES_DIR  + '/' + npc + '_' + action + '_anim_f*.png')
+        sprites.sort()
+        
+        for i in range(len(sprites)):
+            sprites[i] = pg.image.load(sprites[i]).convert_alpha()
+        
+        return sprites
+
+    def update_time_dependent(self, dt):
+        self.current_time += dt
+        if self.current_time >= self.animation_time:
+            self.current_time = 0
+            self.index = (self.index + 1) % len(self.images)
+            self.image = self.images[self.index]
+
+    def update(self, dt):
+        self.update_time_dependent(dt)
+        self.rect.topleft = self._position
+
+
+class OBJ(pg.sprite.Sprite):
+    def __init__(self, x, y, obj):
+        super().__init__()
+        self.images_idle = self.load_obj_animation(obj)
+        self.index = 0
+        self.images = self.images_idle
+        self.image = self.images[self.index]
+
+        self.animation_time = 0.12
+        self.current_time = 0
+
+        self.animation_frames = len(self.images)
+        self.current_frame = 0
+
+        self._position = [x, y]
+        self.rect = self.image.get_rect()
+
+    @property
+    def position(self):
+        return list(self._position)
+
+    @position.setter
+    def position(self, value):
+        self._position = list(value)
+    
+    def load_obj_animation(self, obj):
+        sprites = glob(OBJECTS_SPRITES_DIR  + '/' + obj + '_anim_f*.png')
+        sprites.sort()
+        
+        for i in range(len(sprites)):
+            sprites[i] = pg.image.load(sprites[i]).convert_alpha()
+        
+        return sprites
+
+    def update_time_dependent(self, dt):
+        self.current_time += dt
+        if self.current_time >= self.animation_time:
+            self.current_time = 0
+            self.index = (self.index + 1) % len(self.images)
+            self.image = self.images[self.index]
+
+    def update(self, dt):
+        self.update_time_dependent(dt)
+        self.rect.topleft = self._position
