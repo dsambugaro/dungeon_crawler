@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.2" tiledversion="1.2.1" orientation="orthogonal" renderorder="right-down" width="100" height="100" tilewidth="8" tileheight="8" infinite="0" nextlayerid="12" nextobjectid="96">
+<map version="1.2" tiledversion="1.2.1" orientation="orthogonal" renderorder="right-down" width="100" height="100" tilewidth="8" tileheight="8" infinite="0" nextlayerid="12" nextobjectid="109">
  <tileset firstgid="1" name="caves" tilewidth="8" tileheight="8" tilecount="5600" columns="160">
   <image source="../art/tile_source/CB-All_Temple.png" trans="ff00ff" width="1280" height="280"/>
   <tile id="3122">
@@ -673,6 +673,17 @@
     <property name="texto" value="unread"/>
    </properties>
   </object>
+  <object id="96" name="battle" x="158.833" y="97.1667" width="145.167" height="92.3333"/>
+  <object id="99" name="battle" x="303.25" y="55.5" width="391.5" height="113"/>
+  <object id="100" name="battle" x="440.25" y="143.5" width="313.5" height="133"/>
+  <object id="101" name="battle" x="567.25" y="277.5" width="166.5" height="55"/>
+  <object id="102" name="battle" x="501.25" y="335" width="61" height="89"/>
+  <object id="103" name="battle" x="263.5" y="420.5" width="232" height="68.5"/>
+  <object id="104" name="battle" x="52" y="293.25" width="111" height="57"/>
+  <object id="105" name="battle" x="23" y="526.5" width="170.667" height="185.5"/>
+  <object id="106" name="battle" x="145" y="709.25" width="36" height="73.5"/>
+  <object id="107" name="battle" x="192.5" y="634.75" width="368.5" height="85"/>
+  <object id="108" name="battle" x="561" y="600.75" width="71" height="169.5"/>
  </objectgroup>
  <objectgroup id="8" name="Locations">
   <object id="74" name="init" x="87.5" y="82.875">
