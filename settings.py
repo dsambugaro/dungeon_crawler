@@ -46,11 +46,25 @@ WEAPONS['regular_sword'] = {
 # Enemies
 ENEMIES = {}
 
-ENEMIES[''] = {
-        'damage': 3,
+ENEMIES['big'] = {
+        'damage': 2,
         'hp': 10,
-        'critical':0.2,
-        'sprite': 'weapon_regular_sword.png'
+        'critical': 0.25,
+        'escape': 0.2
+        }
+
+ENEMIES['normal'] = {
+        'damage': 1,
+        'hp': 8,
+        'critical':0.15,
+        'escape': 0.3
+        }
+
+ENEMIES['tiny'] = {
+        'damage': 1,
+        'hp': 5,
+        'critical':0.08,
+        'escape': 0.5
         }
 
 # Dialogs
@@ -88,7 +102,7 @@ WINDOW_RESOLUTION = (1280, 720)
 # Player settings
 PLAYER_VELOCITY = [0, 0]
 PLAYER_MOVE_SPEED = 150
-HP = 10
+HP = 8
 INVENTARY = {}
 INVENTARY['weapons'] = []
 INVENTARY['shields'] = []

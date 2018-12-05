@@ -8,6 +8,8 @@ Created on Wed Nov  7 16:04:21 2018
 
 import sys
 import os.path
+import random as r
+from time import sleep
 
 import pygame as pg
 from pygame.locals import *
@@ -15,7 +17,7 @@ from pyscroll.group import PyscrollGroup
 
 from settings import *
 from tilemap import Map
-from sprites import Player, Door, NPC
+from sprites import Player, Door, NPC, Pointer
 
 scene = None
 
@@ -167,13 +169,24 @@ class MainGame:
             scene = scenes['Battle']
 
 class Battle:
-    def __init__(self, enemie):
+    sizes = ['big', 'normal','tiny']
+    monsters = {
+            'big':['big_zombie', 'ogre','ice_zombie', 'chort'],
+            'normal':['orc_shaman', 'orc_warrior', 'masked_orc', 'skelet', 'wogol', 'zombie'],
+            'tiny':['chest_mimic_open','swampy', 'tiny_zombie','goblin', 'imp','muddy']
+            }
+    
+    def __init__(self):
         pg.init()
         pg.display.set_caption('< a nice name here >')
         self.screen = pg.display.set_mode(WINDOW_RESOLUTION)
         self.dialog = None
         self.dialog_index = 0
+        self.size = self.sizes[r.randint(0,len(self.sizes)-1)]
+        self.monster = self.monsters[self.size][r.randint(0,len(self.monsters[self.size])-1)]
+        self.enemie = ENEMIES[self.size]
         self.new_map('battle.tmx')
+        self.acao = 1
 
     def new_map(self, filename):
         self.map = Map(get_map(filename), self.screen, zoom=1)
@@ -181,17 +194,34 @@ class Battle:
         self.update_obstacles()
 
     def update_obstacles(self):
-        self.acao = []
+        pg.font.init()
+        font_1 = pg.font.SysFont('Source Code Pro Black', 48)
+        self.acoes = []
         self.npcs = []
         self.dialogos = []
         self.dialogos_col = []
         for object in self.map.tmx_data.objects:
             if object.name == 'acao' and object.visible:
-                self.acao.append(pg.Rect(object.x, object.y, object.width, object.height))
+                acao = pg.Rect(object.x, object.y, object.width, object.height)
+                if object.type == '1':
+                    self.atacar = [acao.centerx, acao.centery]
+                    self.pointer = Pointer(self.atacar)
+                    self.group.add(self.pointer)
+                if object.type == '2':
+                    self.defender = [acao.centerx, acao.centery]
+                if object.type == '3':
+                    self.fugir = [acao.centerx, acao.centery]
             if object.name == 'enemie' and object.visible:
                 npc = pg.Rect(object.x, object.y, object.width, object.height)
-                self.demon = NPC(npc.centerx, npc.centery, 'big_demon')
+                self.demon = NPC(npc.centerx, npc.centery, self.monster, w=300, h=300)
                 self.group.add(self.demon)
+            if object.name == 'atack' and object.visible:
+                if object.type == '1':
+                    self.text_a = [font_1.render('ATACAR',True,(255,255,255)), [object.x,object.x]]
+                if object.type == '2':
+                    self.text_d = [font_1.render('DEFENDER',True,(255,255,255)), [object.x,object.x]]
+                if object.type == '3':
+                    self.text_f = [font_1.render('FUGIR',True,(255,255,255)), [object.x,object.x]]
 
     def draw_ui(self):
         full = pg.image.load(os.path.join(UI_SPRITES_DIR, 'ui_heart_full.png')).convert_alpha()
@@ -215,10 +245,20 @@ class Battle:
         for i in range(0, HEARTS):
                 self.screen.blit(hearts[i], (WINDOW_RESOLUTION[0] - HP_SIZE*(i+1), 10))
         
+        self.screen.blit(self.text_a[0],(100, 500))
+        self.screen.blit(self.text_d[0],(500, 500))
+        self.screen.blit(self.text_f[0],(900, 500))
+        
         pg.display.update()
 
 
     def draw(self):
+        if self.acao == 1:
+            self.pointer._position = self.atacar
+        elif self.acao == 2:
+            self.pointer._position = self.defender
+        elif self.acao == 3:
+            self.pointer._position = self.fugir
         self.screen.fill((255,255,255))
 #        self.group.center(self.demon.rect.center)
         self.group.draw(self.screen)
@@ -230,8 +270,31 @@ class Battle:
 #        event = poll()
         while event:
             if event.type == KEYDOWN:
-                if event.key == K_h:
-                    print('help')
+                if event.key == K_LEFT or event.key == K_a:
+                    if self.acao > 1:
+                        self.acao -= 1
+                elif event.key == K_RIGHT or event.key == K_d:
+                    if self.acao < 3:
+                        self.acao += 1
+                elif event.key == K_RETURN:
+                    if self.acao == 1:
+                        if r.random() <= scenes['Game'].player.weapon['critical']:
+                            self.enemie['hp'] -= scenes['Game'].player.weapon['damage'] * 2
+                        else:
+                            self.enemie['hp'] -= scenes['Game'].player.weapon['damage']
+                    elif self.acao == 2:
+                        pass
+                    elif self.acao == 3:
+                        if r.random() <= self.enemie['escape']:
+                            scene = scenes['Game']
+                        else:
+                            pg.font.init()
+                            font_1 = pg.font.SysFont('Source Code Pro Black', 48)
+                            text = font_1.render('NÃO CONSEGIU FUGIR',True,(255,255,255))
+                            self.screen.blit(text,(500, 600))
+                            pg.display.update()
+                            sleep(2)
+                    
             event = poll()
 
     def update(self, dt):
@@ -241,10 +304,13 @@ class Battle:
 
 scenes = {
         'Game': MainGame(),
-        'Battle': Battle('k')
+        'Battle': Battle()
           }
 
 scene = scenes['Game']
+
+def updateHP(value):
+    scenes['Game'].player.HP += value
 
 if __name__ == "__main__":
     

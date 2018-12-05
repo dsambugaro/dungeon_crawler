@@ -162,17 +162,17 @@
  <objectgroup id="3" name="obj">
   <object id="1" name="Text" x="64" y="480" width="1151.88" height="175.833"/>
   <object id="2" name="enemie" x="54.6667" y="24" width="1172.67" height="422.333"/>
-  <object id="7" name="atack" x="138.206" y="528" width="284.255" height="67.1667">
+  <object id="7" name="atack" type="1" x="138.206" y="528" width="284.255" height="67.1667">
    <text fontfamily="Source Code Pro Black" pixelsize="64" wrap="1" color="#ffffff" bold="1" italic="1" halign="center" valign="center">ATACAR</text>
   </object>
-  <object id="8" name="atack" x="489" y="528" width="316.255" height="67.1667">
+  <object id="8" name="atack" type="2" x="489" y="528" width="316.255" height="67.1667">
    <text fontfamily="Source Code Pro Black" pixelsize="64" wrap="1" color="#ffffff" bold="1" italic="1" halign="center" valign="center">DEFENDER</text>
   </object>
-  <object id="9" name="atack" x="864" y="528" width="284.255" height="67.1667">
+  <object id="9" name="atack" type="3" x="864" y="528" width="284.255" height="67.1667">
    <text fontfamily="Source Code Pro Black" pixelsize="64" wrap="1" color="#ffffff" bold="1" italic="1" halign="center" valign="center">FUGIR</text>
   </object>
-  <object id="10" name="acao" type="1" x="96" y="544" width="48" height="48"/>
-  <object id="11" name="acao" type="2" x="432" y="544" width="48" height="48"/>
-  <object id="12" name="acao" type="3" x="848" y="544" width="48" height="48"/>
+  <object id="10" name="acao" type="1" x="96" y="512" width="48" height="48"/>
+  <object id="11" name="acao" type="2" x="512" y="512" width="48" height="48"/>
+  <object id="12" name="acao" type="3" x="880" y="512" width="48" height="48"/>
  </objectgroup>
 </map>

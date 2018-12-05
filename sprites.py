@@ -18,6 +18,7 @@ import save
 class Player(pg.sprite.Sprite):
     def __init__(self, game, x, y):
         pg.sprite.Sprite.__init__(self)
+        self.weapon = WEAPONS['rusty_sword']
         self.game = game
         self.images_idle = self.load_character_animation('elf','m','idle')
         self.images_run = self.load_character_animation('elf','m','run')
@@ -160,21 +161,36 @@ class Door(pg.sprite.Sprite):
     def update(self, dt):
         self.rect.topleft = self._position
 
+class Pointer(pg.sprite.Sprite):
+    def __init__(self, pos):
+        super().__init__()
+        self.image = pg.image.load(UI_SPRITES_DIR + '/arrow.png').convert_alpha()
+        self.image = pg.transform.scale(self.image, (70, 70))
+        self.rect = self.image.get_rect()
+        self._position = [pos[0], pos[1]]
+    
+    def update(self, dt):
+        self.rect.topleft = self._position
+
 class NPC(pg.sprite.Sprite):
-    def __init__(self, x, y, npc, action='idle'):
+    def __init__(self, x, y, npc, action='idle', w=None, h=None):
         super().__init__()
         self.images_idle = self.load_character_animation(npc, action)
         self.index = 0
         self.images = self.images_idle
+        if w and h:
+            for i in range(len(self.images)):
+                self.images[i] = pg.transform.scale(self.images[i], (w, h))
         self.image = self.images[self.index]
-
         self.animation_time = 0.12
         self.current_time = 0
 
         self.animation_frames = len(self.images)
         self.current_frame = 0
-
-        self._position = [x, y]
+        if w and h:
+            self._position = [x-w/2, y-h/2]
+        else:
+            self._position = [x, y]
         self.rect = self.image.get_rect()
 
     @property
