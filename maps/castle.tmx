@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.2" tiledversion="1.2.1" orientation="orthogonal" renderorder="right-down" width="50" height="50" tilewidth="16" tileheight="16" infinite="0" nextlayerid="7" nextobjectid="60">
+<map version="1.2" tiledversion="1.2.1" orientation="orthogonal" renderorder="right-down" width="50" height="50" tilewidth="16" tileheight="16" infinite="0" nextlayerid="9" nextobjectid="87">
  <tileset firstgid="1" name="PurplePalace" tilewidth="16" tileheight="16" tilecount="576" columns="24">
   <image source="../art/tile_source/PurplePalace_.png" width="384" height="384"/>
  </tileset>
@@ -176,8 +176,8 @@
 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,261,262,0,0,0,0,0,0,309,310,0,0,
 0,0,0,0,67,159,159,159,0,0,0,159,163,159,0,0,0,159,161,162,0,0,0,160,161,162,0,0,157,158,0,0,67,0,0,0,0,0,285,286,0,0,0,0,0,0,333,334,0,0,
 0,0,0,0,91,183,183,183,0,0,0,183,187,183,0,0,0,183,185,186,0,0,0,184,185,186,0,0,181,182,0,0,91,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
-0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
-0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,165,166,0,0,0,0,
+0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,189,190,0,0,0,0,
 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
 0,0,0,0,67,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,67,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
 0,0,0,0,91,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,91,0,0,0,0,0,309,310,0,0,0,0,0,0,357,358,0,0,
@@ -219,6 +219,53 @@
 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
 </data>
  </layer>
+ <objectgroup id="7" name="Items">
+  <object id="70" name="hp" type="2" x="496" y="128" width="16" height="16">
+   <properties>
+    <property name="state" value="notTaken"/>
+   </properties>
+  </object>
+  <object id="71" name="hp" type="2" x="496" y="192" width="16" height="16">
+   <properties>
+    <property name="state" value="notTaken"/>
+   </properties>
+  </object>
+  <object id="72" name="hp" type="1" x="240" y="128" width="16" height="16">
+   <properties>
+    <property name="state" value="notTaken"/>
+   </properties>
+  </object>
+  <object id="73" name="hp" type="1" x="144" y="128" width="16" height="16">
+   <properties>
+    <property name="state" value="notTaken"/>
+   </properties>
+  </object>
+  <object id="74" name="hp" type="1" x="80" y="192" width="16" height="16">
+   <properties>
+    <property name="state" value="notTaken"/>
+   </properties>
+  </object>
+  <object id="75" name="hp" type="1" x="80" y="144" width="16" height="16">
+   <properties>
+    <property name="state" value="notTaken"/>
+   </properties>
+  </object>
+  <object id="76" name="hp" type="1" x="128" y="672" width="16" height="16">
+   <properties>
+    <property name="state" value="notTaken"/>
+   </properties>
+  </object>
+  <object id="77" name="hp" type="2" x="128" y="608" width="16" height="16">
+   <properties>
+    <property name="state" value="notTaken"/>
+   </properties>
+  </object>
+  <object id="78" name="hp" type="1" x="240" y="672" width="16" height="16">
+   <properties>
+    <property name="state" value="notTaken"/>
+   </properties>
+  </object>
+ </objectgroup>
  <objectgroup id="5" name="Walls">
   <object id="2" name="wall" x="717" y="552.667" width="3.33333" height="150"/>
   <object id="4" name="wall" x="559.333" y="635.167" width="3.33333" height="67.9997"/>
@@ -237,10 +284,10 @@
   <object id="22" name="wall" x="225.166" y="554" width="47.001" height="4.66637"/>
   <object id="23" name="wall" x="224" y="219.333" width="3.33333" height="339.333"/>
   <object id="24" name="wall" x="155.667" y="219.334" width="3.33333" height="339.333"/>
-  <object id="25" name="wall" x="208.167" y="672.333" width="31.6667" height="31.3333"/>
+  <object id="25" name="wall" x="208" y="672" width="31.6667" height="31.3333"/>
   <object id="26" name="wall" x="144.833" y="608.333" width="29" height="26.3333"/>
   <object id="27" name="wall" x="208.5" y="608.5" width="13" height="26.3333"/>
-  <object id="29" name="wall" x="144.5" y="672" width="31.6667" height="31.3333"/>
+  <object id="29" name="wall" x="144" y="672" width="31.6667" height="31.3333"/>
   <object id="30" name="wall" x="64.6667" y="106.334" width="3.33333" height="118"/>
   <object id="31" name="wall" x="64.8328" y="219" width="94.3343" height="4.66637"/>
   <object id="32" name="wall" x="224.318" y="219" width="311.516" height="4.66637"/>
@@ -266,6 +313,22 @@
   <object id="53" name="wall" x="601" y="235.333" width="167.667" height="4.66637"/>
   <object id="54" name="wall" x="600" y="89.6668" width="168.667" height="4.66637"/>
   <object id="55" name="wall" x="764.667" y="90" width="3.33333" height="149.667"/>
+ </objectgroup>
+ <objectgroup id="8" name="Points">
+  <object id="79" name="dialogo" type="castle_first" x="672" y="608" width="31.75" height="31.75">
+   <properties>
+    <property name="texto" value="unread"/>
+   </properties>
+  </object>
+  <object id="81" name="dialogo" type="castle_last" x="688" y="128" width="64" height="64.25">
+   <properties>
+    <property name="texto" value="unread"/>
+   </properties>
+  </object>
+  <object id="82" name="battle" x="106" y="546" width="618" height="161"/>
+  <object id="83" x="-12" y="-108"/>
+  <object id="84" name="battle" x="64" y="88" width="706" height="154"/>
+  <object id="85" name="battle" x="151" y="241" width="78" height="315"/>
  </objectgroup>
  <objectgroup id="6" name="Locations">
   <object id="58" name="init" x="643.667" y="614.333">

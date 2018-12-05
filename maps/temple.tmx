@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.2" tiledversion="1.2.0" orientation="orthogonal" renderorder="right-down" width="50" height="64" tilewidth="16" tileheight="16" infinite="0" nextlayerid="20" nextobjectid="145">
+<map version="1.2" tiledversion="1.2.1" orientation="orthogonal" renderorder="right-down" width="50" height="64" tilewidth="16" tileheight="16" infinite="0" nextlayerid="20" nextobjectid="153">
  <tileset firstgid="1" name="lvl_1" tilewidth="16" tileheight="16" tilecount="1024" columns="32">
   <image source="../art/tile_source/0x72_DungeonTilesetII_v1.1.png" width="512" height="512"/>
   <tile id="36">
@@ -383,7 +383,7 @@
 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
 </data>
  </layer>
- <objectgroup id="10" name="Walls" locked="1">
+ <objectgroup id="10" name="Walls" visible="0" locked="1">
   <object id="4" name="wall" x="286.875" y="525.5" width="18.125" height="11.375"/>
   <object id="7" name="wall" x="495" y="526" width="18.125" height="11.375"/>
   <object id="8" name="wall" x="335" y="318" width="18.125" height="11.375"/>
@@ -489,23 +489,44 @@
  </objectgroup>
  <objectgroup id="15" name="Points">
   <object id="127" name="init" type="1" x="169" y="677" width="32" height="32"/>
-  <object id="143" name="dialogo" type="test" x="240" y="704" width="48" height="48">
+  <object id="144" name="dialogo" type="entrance" x="176" y="703" width="31.3333" height="32.6667">
    <properties>
     <property name="texto" value="unread"/>
    </properties>
   </object>
-  <object id="144" name="dialogo" type="first" x="288" y="704" width="48" height="48">
+  <object id="144" name="dialogo" type="first_door" x="384" y="528" width="32" height="15.3333">
+   <properties>
+    <property name="texto" value="unread"/>
+   </properties>
+  </object>
+  <object id="146" name="dialogo" type="first_door_end" x="383.667" y="496.333" width="32" height="15.3333">
+   <properties>
+    <property name="texto" value="unread"/>
+   </properties>
+  </object>
+  <object id="148" name="dialogo" type="second_door_end" x="144" y="288" width="32" height="15.3333">
+   <properties>
+    <property name="texto" value="unread"/>
+   </properties>
+  </object>
+  <object id="150" name="dialogo" type="third_door_end" x="624" y="288" width="32" height="15.3333">
+   <properties>
+    <property name="texto" value="unread"/>
+   </properties>
+  </object>
+  <object id="151" name="dialogo" type="fourth_door_end" x="384" y="112" width="32" height="15.3333">
+   <properties>
+    <property name="texto" value="unread"/>
+   </properties>
+  </object>
+  <object id="152" name="dialogo" type="final_battle" x="384" y="240" width="32" height="15.3333">
    <properties>
     <property name="texto" value="unread"/>
    </properties>
   </object>
  </objectgroup>
- <objectgroup id="13" name="NPCs" locked="1">
-  <object id="137" name="demon" type="1" x="384" y="512" width="32" height="32"/>
-  <object id="138" name="zombie" type="2" x="144" y="304" width="32" height="32"/>
-  <object id="139" name="zombie" type="3" x="624" y="304" width="32" height="32"/>
-  <object id="140" name="orc" type="4" x="624" y="128" width="32" height="32"/>
-  <object id="141" name="orc" type="5" x="144" y="128" width="32" height="32"/>
+ <objectgroup id="13" name="NPCs">
+  <object id="137" name="demon" type="1" x="384" y="176" width="32" height="32"/>
   <object id="142" name="items" type="2" x="392" y="314" width="32" height="32"/>
  </objectgroup>
 </map>

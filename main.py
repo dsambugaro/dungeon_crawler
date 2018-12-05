@@ -83,25 +83,25 @@ class MainGame:
                 self.dialogos.append(object)
 
     def draw_ui(self):
-        
+
         full = pg.image.load(os.path.join(UI_SPRITES_DIR, 'ui_heart_full.png')).convert_alpha()
         half = pg.image.load(os.path.join(UI_SPRITES_DIR, 'ui_heart_half.png')).convert_alpha()
         empty = pg.image.load(os.path.join(UI_SPRITES_DIR, 'ui_heart_empty.png')).convert_alpha()
-        
+
         full = pg.transform.scale(full, (HP_SIZE, HP_SIZE))
         half = pg.transform.scale(half, (HP_SIZE, HP_SIZE))
         half = pg.transform.flip(half, True, False)
         empty = pg.transform.scale(empty, (HP_SIZE, HP_SIZE))
-        
+
         hearts_full = int((self.player.HP / 0.2)/10)
         hearts = [full for i in range(hearts_full)]
-        
+
         if self.player.HP % 2 != 0:
             hearts.append(half)
 
         for i in range(HEARTS-hearts_full):
             hearts.append(empty)
-        
+
         for i in range(0, HEARTS):
                 self.screen.blit(hearts[i], (WINDOW_RESOLUTION[0] - HP_SIZE*(i+1), 10))
 
@@ -111,10 +111,10 @@ class MainGame:
         self.group.center(self.player.rect.center)
         self.group.draw(self.screen)
         self.draw_ui()
-        
+
         pg.font.init()
         font_1 = pg.font.SysFont('Source Code Pro Black', 48)
-        
+
         if self.dialog:
 #            this_sentence = []
             if len(DIALOGS[self.dialog]) > self.dialog_index:
@@ -130,7 +130,7 @@ class MainGame:
 
 #        for sprite in self.group.sprites():
 #            pg.draw.rect(self.screen, (255, 255, 255), sprite.rect)
-#        
+#
 #        for wall in self.obstacle:
 #            pg.draw.rect(self.screen, (255, 255, 255), wall)
 
@@ -178,7 +178,7 @@ class Battle:
     
     def __init__(self):
         pg.init()
-        pg.display.set_caption('< a nice name here >')
+        pg.display.set_caption('The Guardian')
         self.screen = pg.display.set_mode(WINDOW_RESOLUTION)
         self.dialog = None
         self.dialog_index = 0
@@ -227,28 +227,28 @@ class Battle:
         full = pg.image.load(os.path.join(UI_SPRITES_DIR, 'ui_heart_full.png')).convert_alpha()
         half = pg.image.load(os.path.join(UI_SPRITES_DIR, 'ui_heart_half.png')).convert_alpha()
         empty = pg.image.load(os.path.join(UI_SPRITES_DIR, 'ui_heart_empty.png')).convert_alpha()
-        
+
         full = pg.transform.scale(full, (HP_SIZE, HP_SIZE))
         half = pg.transform.scale(half, (HP_SIZE, HP_SIZE))
         half = pg.transform.flip(half, True, False)
         empty = pg.transform.scale(empty, (HP_SIZE, HP_SIZE))
-        
+
         hearts_full = int((scenes['Game'].player.HP / 0.2)/10)
         hearts = [full for i in range(hearts_full)]
-        
+
         if scenes['Game'].player.HP % 2 != 0:
             hearts.append(half)
 
         for i in range(HEARTS-hearts_full):
             hearts.append(empty)
-        
+
         for i in range(0, HEARTS):
                 self.screen.blit(hearts[i], (WINDOW_RESOLUTION[0] - HP_SIZE*(i+1), 10))
         
         self.screen.blit(self.text_a[0],(100, 500))
         self.screen.blit(self.text_d[0],(500, 500))
         self.screen.blit(self.text_f[0],(900, 500))
-        
+
         pg.display.update()
 
 
@@ -299,8 +299,8 @@ class Battle:
 
     def update(self, dt):
         self.group.update(dt)
-        
-        
+
+
 
 scenes = {
         'Game': MainGame(),
@@ -313,14 +313,14 @@ def updateHP(value):
     scenes['Game'].player.HP += value
 
 if __name__ == "__main__":
-    
+
     try:
         clock = pg.time.Clock()
         running = True
 
         from collections import deque
         times = deque(maxlen=30)
-        
+
         running = True
         g = 0
         try:
@@ -351,7 +351,7 @@ if __name__ == "__main__":
                 scene.update(dt)
                 scene.draw()
                 pg.display.flip()
-                
+
         except KeyboardInterrupt:
             running = False
             pg.quit()

@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.2" tiledversion="1.2.1" orientation="orthogonal" renderorder="right-down" width="50" height="50" tilewidth="16" tileheight="16" infinite="0" nextlayerid="7" nextobjectid="42">
+<map version="1.2" tiledversion="1.2.1" orientation="orthogonal" renderorder="right-down" width="50" height="50" tilewidth="16" tileheight="16" infinite="0" nextlayerid="9" nextobjectid="57">
  <tileset firstgid="1" name="dungeon" tilewidth="16" tileheight="16" tilecount="448" columns="8">
   <image source="../art/tile_source/Dungeon1.png" width="128" height="896"/>
  </tileset>
@@ -202,9 +202,9 @@
 0,0,0,0,0,0,119,120,119,120,0,0,0,0,119,120,119,120,0,0,0,0,0,0,0,0,0,0,0,0,0,117,118,117,118,0,0,0,0,119,120,119,120,0,0,0,0,0,0,0,
 0,0,0,0,0,0,126,126,126,126,0,0,0,0,126,126,126,126,0,0,0,0,0,0,0,0,0,0,0,0,0,125,126,125,126,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
-0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
-0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
-0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,0,0,0,0,425,426,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,0,0,0,0,433,434,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,0,0,0,0,441,442,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
@@ -219,6 +219,48 @@
 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
 </data>
  </layer>
+ <objectgroup id="7" name="Items">
+  <object id="42" name="hp" type="2" x="624" y="144" width="16.6667" height="16">
+   <properties>
+    <property name="state" value="notTaken"/>
+   </properties>
+  </object>
+  <object id="43" name="hp" type="1" x="640" y="144" width="16.6667" height="16">
+   <properties>
+    <property name="state" value="notTaken"/>
+   </properties>
+  </object>
+  <object id="44" name="hp" type="2" x="128" y="176" width="16.6667" height="16">
+   <properties>
+    <property name="state" value="notTaken"/>
+   </properties>
+  </object>
+  <object id="45" name="hp" type="1" x="144" y="176" width="16.6667" height="16">
+   <properties>
+    <property name="state" value="notTaken"/>
+   </properties>
+  </object>
+  <object id="46" name="hp" type="2" x="144" y="192" width="16.6667" height="16">
+   <properties>
+    <property name="state" value="notTaken"/>
+   </properties>
+  </object>
+  <object id="47" name="hp" type="1" x="144" y="144" width="16.6667" height="16">
+   <properties>
+    <property name="state" value="notTaken"/>
+   </properties>
+  </object>
+  <object id="48" name="hp" type="2" x="432" y="128" width="16.6667" height="16">
+   <properties>
+    <property name="state" value="notTaken"/>
+   </properties>
+  </object>
+  <object id="49" name="hp" type="1" x="448" y="128" width="16.6667" height="16">
+   <properties>
+    <property name="state" value="notTaken"/>
+   </properties>
+  </object>
+ </objectgroup>
  <objectgroup id="5" name="Walls">
   <object id="1" name="wall" x="491" y="524.5" width="5" height="121.5"/>
   <object id="2" name="wall" x="688.5" y="523" width="5" height="123"/>
@@ -251,6 +293,14 @@
   <object id="34" name="wall" x="665.332" y="142.16" width="17.337" height="15.6798" rotation="-90.3778"/>
   <object id="35" name="wall" x="313.185" y="160.411" width="32.2968" height="15.844" rotation="-90.3778"/>
   <object id="36" name="wall" x="251.185" y="160.411" width="32.2968" height="41.5101" rotation="-90.3778"/>
+ </objectgroup>
+ <objectgroup id="8" name="Points">
+  <object id="50" name="dialogo" type="dungeon_first" x="608" y="560" width="48.3333" height="48"/>
+  <object id="52" name="battle" x="82.6667" y="516" width="218.667" height="137.333"/>
+  <object id="53" name="battle" x="446.666" y="500.667" width="218.667" height="137.333"/>
+  <object id="54" name="battle" x="101.333" y="110" width="594.667" height="142.666"/>
+  <object id="55" name="battle" x="142.666" y="238" width="96.0003" height="290.666"/>
+  <object id="56" name="battle" x="542.667" y="233.334" width="96.0003" height="290.666"/>
  </objectgroup>
  <objectgroup id="6" name="Locations">
   <object id="39" name="end" x="175" y="575.333" width="32.3333" height="32"/>
