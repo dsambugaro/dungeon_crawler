@@ -491,7 +491,12 @@
   <object id="127" name="init" type="1" x="169" y="677" width="32" height="32"/>
   <object id="143" name="dialogo" type="test" x="240" y="704" width="48" height="48">
    <properties>
-    <property name="texto" value="uhul"/>
+    <property name="texto" value="unread"/>
+   </properties>
+  </object>
+  <object id="144" name="dialogo" type="first" x="288" y="704" width="48" height="48">
+   <properties>
+    <property name="texto" value="unread"/>
    </properties>
   </object>
  </objectgroup>

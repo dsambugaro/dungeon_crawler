@@ -33,7 +33,7 @@ class MainGame:
         pg.display.set_caption('< a nice name here >')
         self.screen = pg.display.set_mode(WINDOW_RESOLUTION)
         self.openDoors = ['1']
-        self.defeated = ['1']
+        self.defeated = []
         self.dialog = None
         self.dialog_index = 0
         self.new_map(TEMPLE)
@@ -60,10 +60,10 @@ class MainGame:
                 rect = pg.Rect(object.x, object.y, object.width, object.height)
                 self.player = Player(self, rect.centerx,rect.centery)
                 self.group.add(self.player)
-#            if object.name == 'demon' and object.visible and object.type not in self.defeated:
-#                self.demon = NPC(object.x,object.y, 'big_demon')
-#                self.obstacle.append(self.demon.rect)
-#                self.group.add(self.demon)
+            if object.name == 'demon' and object.visible and object.type not in self.defeated:
+                self.demon = NPC(object.x,object.y, 'big_demon')
+                self.obstacle.append(self.demon.rect)
+                self.group.add(self.demon)
 #            if object.name == 'orc' and object.visible and object.type not in self.defeated:
 #                self.demon = NPC(object.x,object.y, 'ogre')
 #                self.obstacle.append(self.demon.rect)
@@ -157,8 +157,8 @@ class MainGame:
         if self.player.feet.collidelist(self.npcs) > -1:
             self.player.move_back(dt)
         if self.player.feet.collidelist(self.dialogos_col) > -1:
-            if self.dialogos[self.player.feet.collidelist(self.dialogos_col)].texto == 'uhul':
-                self.dialogos[self.player.feet.collidelist(self.dialogos_col)].texto = 'j'
+            if self.dialogos[self.player.feet.collidelist(self.dialogos_col)].texto == 'unread':
+                self.dialogos[self.player.feet.collidelist(self.dialogos_col)].texto = 'read'
                 self.dialog = self.dialogos[self.player.feet.collidelist(self.dialogos_col)].type
                 self.player.velocity = [0,0]
 
@@ -171,29 +171,26 @@ class Battle:
         pg.init()
         pg.display.set_caption('< a nice name here >')
         self.screen = pg.display.set_mode(WINDOW_RESOLUTION)
-        self.openDoors = ['1']
-        self.defeated = ['1']
         self.dialog = None
         self.dialog_index = 0
         self.new_map('battle.tmx')
 
     def new_map(self, filename):
-        self.map = Map(get_map(filename), self.screen)
+        self.map = Map(get_map(filename), self.screen, zoom=1)
         self.group = PyscrollGroup(map_layer=self.map.layer, default_layer=1)
         self.update_obstacles()
 
     def update_obstacles(self):
-        self.obstacle = []
-        self.doors = []
+        self.acao = []
         self.npcs = []
         self.dialogos = []
         self.dialogos_col = []
         for object in self.map.tmx_data.objects:
-            if object.name == 'wall' and object.visible:
-                self.obstacle.append(pg.Rect(object.x, object.y, object.width, object.height))
-            if object.name == 'enemie' and object.visible and object.type not in self.defeated:
-                self.demon = NPC(object.x,object.y, 'big_demon')
-                self.obstacle.append(self.demon.rect)
+            if object.name == 'acao' and object.visible:
+                self.acao.append(pg.Rect(object.x, object.y, object.width, object.height))
+            if object.name == 'enemie' and object.visible:
+                npc = pg.Rect(object.x, object.y, object.width, object.height)
+                self.demon = NPC(npc.centerx, npc.centery, 'big_demon')
                 self.group.add(self.demon)
 
     def draw_ui(self):
@@ -222,7 +219,9 @@ class Battle:
 
 
     def draw(self):
-        self.screen.fill((1,1,1))
+        self.screen.fill((255,255,255))
+#        self.group.center(self.demon.rect.center)
+        self.group.draw(self.screen)
         self.draw_ui()
 
     def handle_input(self, event):
@@ -236,7 +235,7 @@ class Battle:
             event = poll()
 
     def update(self, dt):
-        pass
+        self.group.update(dt)
         
         
 

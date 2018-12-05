@@ -69,6 +69,19 @@ DIALOGS['test'] = [
         ]
     ]
 
+DIALOGS['first'] = [
+        [
+                'Lorem asasdasdasdasdasdasasd asdasdasdasdasdasdasdasdsd',
+                'ASDASDASDASDASDASDASDASDAS DASDASDASDASDASSDSDS',
+                'ASDASDASDASDASDASDASDASDAS DASDASDASDASDASSDSDS',
+                'ASDASDASDASDASDASDASDASDAS DASDASDASDASDASSDSDS'
+        ],
+        [
+                '!@#$%*() ã àá ç õ',
+                'ASDASDASDASDASDASDASDASDAS DASDASDASDASDASSDSDS'
+        ]
+    ]
+
 # Game settings
 WINDOW_RESOLUTION = (1280, 720)
 
