@@ -1,2 +1,2 @@
-# dungeon_crawler_pygame
+# dungeon_crawler
 > in development
